@@ -5,4 +5,4 @@
  * @version 1.0.0
  */
 
-import './components/my-L1-app'
+import './components/my-app'
