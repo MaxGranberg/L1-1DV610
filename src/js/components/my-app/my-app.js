@@ -81,42 +81,60 @@ customElements.define('my-app',
       this.attachShadow({ mode: 'open' })
         .appendChild(template.content.cloneNode(true))
 
-      const form = this.shadowRoot.querySelector('form')
-      const textfield = this.shadowRoot.querySelector('#textfield')
-      const submitButton = this.shadowRoot.querySelector('#submitButton')
-      const resetButton = this.shadowRoot.querySelector('#resetButton')
-      const container = this.shadowRoot.querySelector('#container')
-      const header = this.shadowRoot.querySelector('h1')
+      this.form = this.shadowRoot.querySelector('form')
+      this.textfield = this.shadowRoot.querySelector('#textfield')
+      this.submitButton = this.shadowRoot.querySelector('#submitButton')
+      this.resetButton = this.shadowRoot.querySelector('#resetButton')
+      this.container = this.shadowRoot.querySelector('#container')
+      this.header = this.shadowRoot.querySelector('h1')
+    }
 
-      // Add eventlisteners
-      form.addEventListener('submit', (e) => {
-        e.preventDefault()
+    /**
+     * Called when the element is connected to the DOM. Adding eventlisteners.
+     */
+    connectedCallback () {
+      this.form.addEventListener('submit', this.handleSubmit.bind(this))
+      this.resetButton.addEventListener('click', this.handleReset.bind(this))
+    }
 
-        if (this.shadowRoot.querySelector('my-image-generator')) {
-          this.shadowRoot.querySelector('my-image-generator').remove()
-        }
+    /**
+     * Handles submit when a user has entered their name.
+     *
+     * @param {Event} event - The form submit event.
+     */
+    handleSubmit (event) {
+      event.preventDefault()
 
-        const myImage = document.createElement('my-image-generator')
-        container.append(myImage)
-
-        header.textContent = `Hey ${textfield.value}! Did you let the dog out!?`
-        submitButton.value = 'Yes and I\'ll do it again!'
-        textfield.className = 'notVisible'
-        resetButton.classList.remove('notVisible')
-        form.appendChild(resetButton)
-      })
-
-      resetButton.addEventListener('click', (e) => {
-        e.preventDefault()
-
+      // If an image already exists, remove it before adding a new one.
+      if (this.shadowRoot.querySelector('my-image-generator')) {
         this.shadowRoot.querySelector('my-image-generator').remove()
-        resetButton.remove()
-        textfield.classList.remove('notVisible')
+      }
 
-        header.textContent = 'Sorry, what\'s your name then?'
-        textfield.value = ''
-        submitButton.value = 'Submit'
-      })
+      const myImage = document.createElement('my-image-generator')
+      this.container.append(myImage)
+
+      this.header.textContent = `Hey ${this.textfield.value}! Did you let the dog out!?`
+      this.submitButton.value = 'Yes and I\'ll do it again!'
+      this.textfield.className = 'notVisible'
+      this.resetButton.classList.remove('notVisible')
+      this.form.appendChild(this.resetButton)
+    }
+
+    /**
+     * Handles the resetbutton action.
+     *
+     * @param {Event} event - The resetbutton click event.
+     */
+    handleReset (event) {
+      event.preventDefault()
+
+      this.shadowRoot.querySelector('my-image-generator').remove()
+      this.resetButton.remove()
+      this.textfield.classList.remove('notVisible')
+
+      this.header.textContent = 'Sorry, what\'s your name then?'
+      this.textfield.value = ''
+      this.submitButton.value = 'Submit'
     }
   }
 )
