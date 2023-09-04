@@ -60,8 +60,8 @@ template.innerHTML = `
     <form>
         <input id="textfield" type="text" placeholder="Insert name here..." required>
         <input id="submitButton" type="submit" value="Submit">
+        <button id="resetButton" class="notVisible">No I certainly did not!</button>
     </form>
-    <button id="resetButton" class="notVisible">No I certainly did not!</button>
   </div>
 `
 
@@ -117,7 +117,6 @@ customElements.define('my-app',
       this.submitButton.value = 'Yes and I\'ll do it again!'
       this.textfield.className = 'notVisible'
       this.resetButton.classList.remove('notVisible')
-      this.form.appendChild(this.resetButton)
     }
 
     /**
@@ -129,7 +128,7 @@ customElements.define('my-app',
       event.preventDefault()
 
       this.shadowRoot.querySelector('my-image-generator').remove()
-      this.resetButton.remove()
+      this.resetButton.classList.add('notVisible')
       this.textfield.classList.remove('notVisible')
 
       this.header.textContent = 'Sorry, what\'s your name then?'
